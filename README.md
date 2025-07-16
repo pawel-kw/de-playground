@@ -29,8 +29,8 @@ This playground includes the following services:
 
 ### pgAdmin (Web Interface)
 - **Container**: `de-pgadmin`
-- **Port**: `8080` (accessible from host)
-- **URL**: http://localhost:8080
+- **Port**: `8082` (accessible from host)
+- **URL**: http://localhost:8082
 - **Login**: `admin@de-playground.local` / `admin123`
 
 ## Configuration
@@ -52,10 +52,10 @@ SSH_PORT=2222
 # pgAdmin Configuration
 PGADMIN_EMAIL=admin@de-playground.local
 PGADMIN_PASSWORD=admin123
-PGADMIN_PORT=8080
+PGADMIN_PORT=8082
 
 # File Browser Configuration
-FILEBROWSER_PORT=8081
+FILEBROWSER_PORT=8083
 
 # Network Configuration
 NETWORK_SUBNET=172.20.0.0/16
@@ -99,7 +99,7 @@ psql -h postgres -U deuser -d playground
 ```
 
 ### 6. Access pgAdmin web interface
-Open your browser and go to: http://localhost:8080
+Open your browser and go to: http://localhost:8082
 
 ## Directory Structure
 
@@ -190,8 +190,8 @@ See [PORTAINER.md](PORTAINER.md) for detailed Portainer deployment instructions.
 
 ### Network Access
 - PostgreSQL: `<server-ip>:5432`
-- pgAdmin: `http://<server-ip>:8080`
-- File Browser (Portainer): `http://<server-ip>:8081`
+- pgAdmin: `http://<server-ip>:8082`
+- File Browser (Portainer): `http://<server-ip>:8083`
 
 ## Useful Commands
 

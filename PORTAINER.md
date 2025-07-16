@@ -68,8 +68,8 @@ DE_PASSWORD=depassword
 SSH_PORT=2222
 PGADMIN_EMAIL=admin@de-playground.local
 PGADMIN_PASSWORD=admin123
-PGADMIN_PORT=8080
-FILEBROWSER_PORT=8081
+PGADMIN_PORT=8082
+FILEBROWSER_PORT=8083
 NETWORK_SUBNET=172.20.0.0/16
 ```
 
@@ -82,8 +82,8 @@ Click **Deploy the stack** and wait for all services to start.
 After deployment, the services will be available at:
 
 - **PostgreSQL**: `<server-ip>:5432`
-- **pgAdmin**: `http://<server-ip>:8080`
-- **File Browser**: `http://<server-ip>:8081`
+- **pgAdmin**: `http://<server-ip>:8082`
+- **File Browser**: `http://<server-ip>:8083`
 
 ## File Management
 
@@ -91,7 +91,7 @@ After deployment, the services will be available at:
 
 The File Browser service provides a web interface for managing files:
 
-1. Access `http://<server-ip>:8081`
+1. Access `http://<server-ip>:8083`
 2. Default login: `admin` / `admin`
 3. Navigate to:
    - `/workspace` - Development files
@@ -164,8 +164,8 @@ docker run --rm -v de-playground_workspace_data:/target -v $(pwd):/backup alpine
 If default ports conflict with existing services, change these environment variables:
 
 - `POSTGRES_PORT` (default: 5432)
-- `PGADMIN_PORT` (default: 8080)
-- `FILEBROWSER_PORT` (default: 8081)
+- `PGADMIN_PORT` (default: 8082)
+- `FILEBROWSER_PORT` (default: 8083)
 - `SSH_PORT` (default: 2222)
 
 ## Security Considerations

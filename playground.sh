@@ -47,7 +47,7 @@ start_services() {
     echo
     echo "Access URLs:"
     echo "  PostgreSQL: localhost:5432"
-    echo "  pgAdmin:    http://localhost:8080"
+    echo "  pgAdmin:    http://localhost:8082"
     echo
     echo "Run '$0 status' to check service health"
 }

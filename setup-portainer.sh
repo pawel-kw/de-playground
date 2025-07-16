@@ -83,8 +83,8 @@ show_portainer_instructions() {
     echo
     echo -e "${BLUE}Access URLs (after deployment):${NC}"
     echo "   - PostgreSQL: <server-ip>:5432"
-    echo "   - pgAdmin: http://<server-ip>:8080"
-    echo "   - File Browser: http://<server-ip>:8081"
+    echo "   - pgAdmin: http://<server-ip>:8082"
+    echo "   - File Browser: http://<server-ip>:8083"
     echo
     echo -e "${YELLOW}Note:${NC} Replace <server-ip> with your actual server IP address"
 }
