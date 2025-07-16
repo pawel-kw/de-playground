@@ -70,6 +70,7 @@ PGADMIN_EMAIL=admin@de-playground.local
 PGADMIN_PASSWORD=admin123
 PGADMIN_PORT=8082
 FILEBROWSER_PORT=8083
+FILEBROWSER_NOAUTH=true
 NETWORK_SUBNET=172.20.0.0/16
 ```
 
@@ -92,7 +93,7 @@ After deployment, the services will be available at:
 The File Browser service provides a web interface for managing files:
 
 1. Access `http://<server-ip>:8083`
-2. Default login: `admin` / `admin`
+2. No login required (passwordless by default)
 3. Navigate to:
    - `/workspace` - Development files
    - `/init-scripts` - Database initialization scripts

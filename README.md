@@ -33,6 +33,15 @@ This playground includes the following services:
 - **URL**: http://localhost:8082
 - **Login**: `admin@de-playground.local` / `admin123`
 
+### File Browser (Web Interface)
+- **Port**: `8083` (accessible from host)
+- **URL**: http://localhost:8083
+- **Authentication**: Passwordless by default (configurable via `FILEBROWSER_NOAUTH`)
+- **Features**:
+  - Web-based file management
+  - Access to workspace and init-scripts volumes
+  - Upload, download, and edit files directly from browser
+
 ## Configuration
 
 The stack supports environment variables for easy customization. Create a `.env` file or set environment variables:
@@ -56,6 +65,7 @@ PGADMIN_PORT=8082
 
 # File Browser Configuration
 FILEBROWSER_PORT=8083
+FILEBROWSER_NOAUTH=true
 
 # Network Configuration
 NETWORK_SUBNET=172.20.0.0/16
@@ -100,6 +110,12 @@ psql -h postgres -U deuser -d playground
 
 ### 6. Access pgAdmin web interface
 Open your browser and go to: http://localhost:8082
+
+### 7. Access File Browser (for file management)
+Open your browser and go to: http://localhost:8083
+- No login required (passwordless by default)
+- Access workspace files at `/workspace`
+- Access init scripts at `/init-scripts`
 
 ## Directory Structure
 
@@ -239,3 +255,7 @@ You can easily add more data engineering tools by extending the `docker-compose.
 3. Configure proper network security
 4. Enable SSL/TLS where appropriate
 5. Implement proper backup strategies
+6. **File Browser Security**: The File Browser is configured for passwordless access by default for convenience. For production:
+   - Set `FILEBROWSER_NOAUTH=false` to enable authentication
+   - Configure proper user accounts and permissions
+   - Restrict network access to the File Browser port

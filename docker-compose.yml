@@ -114,6 +114,7 @@ services:
     environment:
       - FB_DATABASE=/database/filebrowser.db
       - FB_ROOT=/srv
+      - FB_NOAUTH=${FILEBROWSER_NOAUTH:-true}
     ports:
       - "${FILEBROWSER_PORT:-8083}:80"
     volumes:
