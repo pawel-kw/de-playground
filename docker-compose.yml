@@ -1,0 +1,152 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-playground}
+      POSTGRES_USER: ${POSTGRES_USER:-deuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-depassword}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - init_scripts:/docker-entrypoint-initdb.d
+    networks:
+      - de-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-deuser} -d ${POSTGRES_DB:-playground}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  # Linux Development Box (Ubuntu)
+  dev-box:
+    image: ubuntu:22.04
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - DE_USER=${DE_USER:-deuser}
+      - DE_PASSWORD=${DE_PASSWORD:-depassword}
+    command: >
+      bash -c "
+        apt-get update &&
+        apt-get install -y 
+          postgresql-client
+          python3
+          python3-pip
+          python3-venv
+          curl
+          wget
+          git
+          vim
+          nano
+          htop
+          net-tools
+          iputils-ping
+          telnet
+          sudo
+          ssh
+          build-essential
+        &&
+        useradd -m -s /bin/bash -G sudo $$DE_USER &&
+        echo \"$$DE_USER:$$DE_PASSWORD\" | chpasswd &&
+        echo \"$$DE_USER ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers &&
+        mkdir -p /workspace &&
+        chown $$DE_USER:$$DE_USER /workspace &&
+        tail -f /dev/null
+      "
+    ports:
+      - "${SSH_PORT:-2222}:22"
+    volumes:
+      - dev_home:/home/${DE_USER:-deuser}
+      - workspace_data:/workspace
+    networks:
+      - de-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+  # pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@de-playground.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "${PGADMIN_PORT:-8080}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - de-network
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  # File manager for easy file access (optional)
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    environment:
+      - FB_DATABASE=/database/filebrowser.db
+      - FB_ROOT=/srv
+    ports:
+      - "${FILEBROWSER_PORT:-8081}:80"
+    volumes:
+      - filebrowser_data:/database
+      - workspace_data:/srv/workspace
+      - init_scripts:/srv/init-scripts
+    networks:
+      - de-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+        reservations:
+          memory: 64M
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  dev_home:
+    driver: local
+  workspace_data:
+    driver: local
+  init_scripts:
+    driver: local
+  filebrowser_data:
+    driver: local
+
+networks:
+  de-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${NETWORK_SUBNET:-172.20.0.0/16}

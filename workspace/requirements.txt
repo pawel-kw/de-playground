@@ -1,0 +1,40 @@
+# Python dependencies for the data engineering playground
+# Install with: pip install -r requirements.txt
+
+# Database connectivity
+psycopg2-binary==2.9.7
+
+# Data analysis and manipulation
+pandas==2.1.0
+numpy==1.24.3
+
+# Data visualization
+matplotlib==3.7.2
+seaborn==0.12.2
+
+# Jupyter notebook support
+jupyter==1.0.0
+ipykernel==6.25.1
+
+# Web scraping and APIs
+requests==2.31.0
+beautifulsoup4==4.12.2
+
+# Data validation
+pydantic==2.3.0
+
+# Configuration management
+python-dotenv==1.0.0
+
+# Date/time handling
+python-dateutil==2.8.2
+
+# JSON handling
+orjson==3.9.5
+
+# Data pipeline tools
+luigi==3.4.0
+
+# Testing
+pytest==7.4.0
+pytest-cov==4.1.0
