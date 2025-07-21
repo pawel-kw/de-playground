@@ -266,17 +266,17 @@ docker exec -i de-postgres psql -U deuser playground < backup.sql
 
 ### File Browser Permission Issues
 
-If you encounter permission denied errors in File Browser:
+If you encounter permission denied errors when trying to access uploaded files in pgAdmin:
 
 1. **Check volume permissions**:
    ```bash
    docker-compose logs volume-permissions
    ```
 
-2. **Manually fix permissions**:
+2. **Manually fix permissions for uploaded files**:
    ```bash
-   docker-compose run --rm volume-permissions
-   docker-compose restart filebrowser
+   docker-compose run --rm volume-permissions sh -c "chmod -R 666 /srv/workspace/*"
+   docker-compose restart filebrowser pgadmin
    ```
 
 3. **Reset File Browser data** (if permissions are corrupted):
@@ -285,6 +285,10 @@ If you encounter permission denied errors in File Browser:
    docker volume rm de-playground_filebrowser_data
    docker-compose up -d
    ```
+
+4. **Alternative: Use File Browser's built-in sharing**:
+   - Upload files via File Browser
+   - Use File Browser's direct download link for pgAdmin import
 
 ## Extending the Playground
 
