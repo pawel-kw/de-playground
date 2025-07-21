@@ -123,13 +123,13 @@ Open your browser and go to: http://localhost:8083
 
 ## Shared Data Workflow
 
-The workspace volume is shared between containers, enabling seamless data workflows:
+The workspace volume is shared between containers with cross-container file access:
 
 ### Upload and Import CSV Data
 1. **Upload CSV file** via File Browser:
    - Go to http://localhost:8083
    - Navigate to `/workspace`
-   - Upload your CSV file
+   - Upload your CSV file (files are created with read/write permissions for all users)
 
 2. **Import to PostgreSQL** via pgAdmin:
    - Go to http://localhost:8082
@@ -137,9 +137,10 @@ The workspace volume is shared between containers, enabling seamless data workfl
    - Right-click on a table → Import/Export Data
    - Select your CSV file from `/srv/workspace/`
 
-3. **Access from other tools**:
-   - Files are available in all containers at their respective mount points
-   - Consistent permissions ensure all services can read uploaded files
+3. **File Permissions**:
+   - Workspace directory: `777` (read/write/execute for all)
+   - Uploaded files: `666` (read/write for all users)
+   - Cross-container compatibility ensured
 
 ## Directory Structure
 
