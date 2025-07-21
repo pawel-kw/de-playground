@@ -76,6 +76,7 @@ services:
   filebrowser:
     image: filebrowser/filebrowser:latest
     user: "1000:1000"  # Use consistent user ID
+    umask: "000"  # Set umask to allow full permissions
     environment:
       - FB_DATABASE=/database/filebrowser.db
       - FB_ROOT=/srv
