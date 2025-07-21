@@ -29,61 +29,6 @@ services:
         reservations:
           memory: 256M
 
-  # Linux Development Box (Ubuntu)
-  dev-box:
-    image: ubuntu:22.04
-    environment:
-      - DEBIAN_FRONTEND=noninteractive
-      - DE_USER=${DE_USER:-deuser}
-      - DE_PASSWORD=${DE_PASSWORD:-depassword}
-    command: >
-      bash -c "
-        apt-get update &&
-        apt-get install -y 
-          postgresql-client
-          python3
-          python3-pip
-          python3-venv
-          curl
-          wget
-          git
-          vim
-          nano
-          htop
-          net-tools
-          iputils-ping
-          telnet
-          sudo
-          ssh
-          build-essential
-        &&
-        useradd -m -s /bin/bash -G sudo $$DE_USER &&
-        echo \"$$DE_USER:$$DE_PASSWORD\" | chpasswd &&
-        echo \"$$DE_USER ALL=(ALL) NOPASSWD:ALL\" >> /etc/sudoers &&
-        mkdir -p /workspace &&
-        chown $$DE_USER:$$DE_USER /workspace &&
-        tail -f /dev/null
-      "
-    ports:
-      - "${SSH_PORT:-2222}:22"
-    volumes:
-      - dev_home:/home/${DE_USER:-deuser}
-      - workspace_data:/workspace
-    networks:
-      - de-network
-    depends_on:
-      postgres:
-        condition: service_healthy
-    restart: unless-stopped
-    stdin_open: true
-    tty: true
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 512M
-
   # pgAdmin for database management
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -135,8 +80,6 @@ volumes:
   postgres_data:
     driver: local
   pgadmin_data:
-    driver: local
-  dev_home:
     driver: local
   workspace_data:
     driver: local
