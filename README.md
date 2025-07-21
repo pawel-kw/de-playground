@@ -37,10 +37,12 @@ This playground includes the following services:
 - **Port**: `8083` (accessible from host)
 - **URL**: http://localhost:8083
 - **Authentication**: Passwordless by default (configurable via `FILEBROWSER_NOAUTH`)
+- **User**: Runs as user ID 1000 with proper volume permissions
 - **Features**:
   - Web-based file management
   - Access to workspace and init-scripts volumes
   - Upload, download, and edit files directly from browser
+  - Automatic permission setup for writable volumes
 
 ## Configuration
 
@@ -227,12 +229,39 @@ docker-compose restart postgres
 # Access dev-box shell
 docker exec -it de-dev-box bash
 
+# Fix File Browser permissions (if needed)
+docker-compose run --rm volume-permissions
+
 # Backup database
 docker exec de-postgres pg_dump -U deuser playground > backup.sql
 
 # Restore database
 docker exec -i de-postgres psql -U deuser playground < backup.sql
 ```
+
+## Troubleshooting
+
+### File Browser Permission Issues
+
+If you encounter permission denied errors in File Browser:
+
+1. **Check volume permissions**:
+   ```bash
+   docker-compose logs volume-permissions
+   ```
+
+2. **Manually fix permissions**:
+   ```bash
+   docker-compose run --rm volume-permissions
+   docker-compose restart filebrowser
+   ```
+
+3. **Reset File Browser data** (if permissions are corrupted):
+   ```bash
+   docker-compose down
+   docker volume rm de-playground_filebrowser_data
+   docker-compose up -d
+   ```
 
 ## Extending the Playground
 

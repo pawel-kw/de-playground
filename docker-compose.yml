@@ -55,9 +55,25 @@ services:
         reservations:
           memory: 256M
 
+  # Volume permission initialization
+  volume-permissions:
+    image: alpine:latest
+    command: >
+      sh -c "
+        echo 'Setting up volume permissions...' &&
+        chmod -R 755 /srv/workspace /srv/init-scripts &&
+        chown -R 1000:1000 /srv/workspace /srv/init-scripts &&
+        echo 'Volume permissions set successfully!'
+      "
+    volumes:
+      - workspace_data:/srv/workspace
+      - init_scripts:/srv/init-scripts
+    restart: "no"
+
   # File manager for easy file access (optional)
   filebrowser:
     image: filebrowser/filebrowser:latest
+    user: "1000:1000"  # Use consistent user ID
     environment:
       - FB_DATABASE=/database/filebrowser.db
       - FB_ROOT=/srv
@@ -70,6 +86,8 @@ services:
       - init_scripts:/srv/init-scripts
     networks:
       - de-network
+    depends_on:
+      - volume-permissions
     restart: unless-stopped
     deploy:
       resources:
