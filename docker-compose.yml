@@ -32,6 +32,7 @@ services:
   # pgAdmin for database management
   pgadmin:
     image: dpage/pgadmin4:latest
+    user: "1000:1000"  # Use same user as filebrowser for shared access
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@de-playground.local}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
@@ -47,6 +48,7 @@ services:
       - de-network
     depends_on:
       - postgres
+      - volume-permissions
     restart: unless-stopped
     deploy:
       resources:
@@ -61,7 +63,7 @@ services:
     command: >
       sh -c "
         echo 'Setting up volume permissions...' &&
-        chmod -R 755 /srv/workspace /srv/init-scripts &&
+        chmod -R 775 /srv/workspace /srv/init-scripts &&
         chown -R 1000:1000 /srv/workspace /srv/init-scripts &&
         echo 'Volume permissions set successfully!'
       "
@@ -78,6 +80,11 @@ services:
       - FB_DATABASE=/database/filebrowser.db
       - FB_ROOT=/srv
       - FB_NOAUTH=${FILEBROWSER_NOAUTH:-true}
+    command: >
+      sh -c "
+        umask 002 &&
+        /filebrowser
+      "
     ports:
       - "${FILEBROWSER_PORT:-8083}:80"
     volumes:

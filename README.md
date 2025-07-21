@@ -38,11 +38,13 @@ This playground includes the following services:
 - **URL**: http://localhost:8083
 - **Authentication**: Passwordless by default (configurable via `FILEBROWSER_NOAUTH`)
 - **User**: Runs as user ID 1000 with proper volume permissions
+- **Shared Access**: Files uploaded here are accessible by pgAdmin and other services
 - **Features**:
   - Web-based file management
   - Access to workspace and init-scripts volumes
   - Upload, download, and edit files directly from browser
   - Automatic permission setup for writable volumes
+  - Shared file access between containers
 
 ## Configuration
 
@@ -118,6 +120,26 @@ Open your browser and go to: http://localhost:8083
 - No login required (passwordless by default)
 - Access workspace files at `/workspace`
 - Access init scripts at `/init-scripts`
+
+## Shared Data Workflow
+
+The workspace volume is shared between containers, enabling seamless data workflows:
+
+### Upload and Import CSV Data
+1. **Upload CSV file** via File Browser:
+   - Go to http://localhost:8083
+   - Navigate to `/workspace`
+   - Upload your CSV file
+
+2. **Import to PostgreSQL** via pgAdmin:
+   - Go to http://localhost:8082
+   - Connect to the PostgreSQL server (host: `postgres`, user: `deuser`)
+   - Right-click on a table → Import/Export Data
+   - Select your CSV file from `/srv/workspace/`
+
+3. **Access from other tools**:
+   - Files are available in all containers at their respective mount points
+   - Consistent permissions ensure all services can read uploaded files
 
 ## Directory Structure
 
