@@ -75,7 +75,7 @@ services:
   # File manager for easy file access (optional)
   filebrowser:
     image: filebrowser/filebrowser:latest
-    user: "5050:5050"  # Use consistent user ID
+    user: "1000:1000"  # Use consistent user ID
     environment:
       - FB_DATABASE=/database/filebrowser.db
       - FB_ROOT=/srv
@@ -84,7 +84,6 @@ services:
       - "${FILEBROWSER_PORT:-8083}:80"
     volumes:
       - filebrowser_data:/database
-      - filebrowser_config:/config
       - workspace_data:/srv/workspace
       - init_scripts:/srv/init-scripts
     networks:
@@ -109,8 +108,6 @@ volumes:
   init_scripts:
     driver: local
   filebrowser_data:
-    driver: local
-  filebrowser_config:
     driver: local
 
 networks:
