@@ -47,7 +47,6 @@ services:
       - de-network
     depends_on:
       - postgres
-      - volume-permissions
     restart: unless-stopped
     deploy:
       resources:
