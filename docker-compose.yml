@@ -80,34 +80,6 @@ services:
         reservations:
           memory: 64M
 
-  # Development server with access to the shared workspace, capable of running python and pyspark jobs
-  dev-server:
-    image: ubuntu:latest
-    user: "1000:1000"  # Use consistent user ID
-    environment:
-      - DE_WORKSPACE=/srv/workspace
-    # Expose port to allow ssh access to the server
-    ports:
-      - "${DEV_SERVER_PORT:-2222}:22"
-    networks:
-      - de-network
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 512M
-    # Install necessary packages and set up the workspace
-    command: >
-      bash -c "apt-get update && apt-get install -y openssh-server python3 python3-pip python3-venv && mkdir -p /var/run/sshd &&
-      echo 'root:root' | chpasswd && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config &&
-      sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config &&
-      mkdir -p /srv/workspace && chown -R 1000:1000 /srv/workspace &&
-      echo 'export DE_WORKSPACE=/srv/workspace' >> /etc/bash.bashrc &&
-      echo 'export PATH=$PATH:/srv/workspace/bin' >> /etc/bash.bashrc &&
-      service ssh start && tail -f /dev/null"
-
 volumes:
   postgres_data:
     driver: local
