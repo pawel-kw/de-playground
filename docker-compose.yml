@@ -84,6 +84,7 @@ services:
       - "${FILEBROWSER_PORT:-8083}:80"
     volumes:
       - filebrowser_data:/database
+      - filebrowser_config:/config
       - workspace_data:/srv/workspace
       - init_scripts:/srv/init-scripts
     networks:
@@ -108,6 +109,8 @@ volumes:
   init_scripts:
     driver: local
   filebrowser_data:
+    driver: local
+  filebrowser_config:
     driver: local
 
 networks:
