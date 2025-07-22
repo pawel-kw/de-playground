@@ -64,7 +64,7 @@ services:
         echo 'Setting up volume permissions...' &&
         chmod -R 777 /srv/workspace &&
         chmod -R 755 /srv/init-scripts &&
-        chown -R 1000:1000 /srv/workspace /srv/init-scripts &&
+        chown -R 5050:5050 /srv/workspace /srv/init-scripts &&
         echo 'Volume permissions set successfully!'
       "
     volumes:
@@ -75,7 +75,7 @@ services:
   # File manager for easy file access (optional)
   filebrowser:
     image: filebrowser/filebrowser:latest
-    user: "1000:1000"  # Use consistent user ID
+    user: "5050:5050"  # Use consistent user ID
     environment:
       - FB_DATABASE=/database/filebrowser.db
       - FB_ROOT=/srv
